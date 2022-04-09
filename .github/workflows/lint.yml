@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - test
   pull_request:
 
 jobs:
@@ -70,6 +71,9 @@ jobs:
         run: |
           # shellcheck disable=SC2016
           (! git --no-pager grep -InP '# type:\s*ignore(?!\[)' -- '**.py' '**.pyi' ':(exclude)test/test_jit.py' || (echo 'The above lines have unqualified `type: ignore`; please convert them to `type: ignore[xxxx]`'; false))
+      - name: Ensure submodules are up to date
+        if: always()
+        run: git submodule update -N
       - name: Ensure GitHub PyPi dependencies are pinned
         if: always()
         run: |
