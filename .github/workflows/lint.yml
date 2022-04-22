@@ -101,7 +101,7 @@ jobs:
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
           GH_BASE: ${{ github.event.pull_request.base.sha }}
-        if: always()
+        if: ${{ github.event_name == 'pull_request' }}
         run: if git diff --name-only "$GH_BASE" HEAD | grep -q third_party  && ! echo "$PR_BODY" | grep -q submodule-update; then echo "PR contains a submodule update, did you forget to run \`git submodule update\`? If this was on purpose, please specify \"submodule-update\" in the PR description."; false; fi
       - name: C++ docs check
         if: ${{ always() && steps.requirements.outcome == 'success' }}
